@@ -37,14 +37,23 @@ export default function PaginaSolicitudes() {
 
   // Da formato a las fechas del array de dias: muestra el rango
   function formatearRango(dias) {
-    if (!dias || dias.length === 0) return "-";
-    const fechas = dias
-      .map((d) => new Date(d.fecha))
-      .sort((a, b) => a - b);
-    const desde = fechas[0].toLocaleDateString("es-UY");
-    const hasta = fechas[fechas.length - 1].toLocaleDateString("es-UY");
-    return desde === hasta ? desde : `${desde} al ${hasta}`;
+  if (!dias || dias.length === 0) return "-";
+
+  // Parsea "2026-07-01T00:00:00.000Z" como fecha LOCAL (sin corrimiento de zona)
+  function aFechaLocal(valor) {
+    const soloFecha = valor.split("T")[0];        // "2026-07-01"
+    const [anio, mes, dia] = soloFecha.split("-"); // ["2026","07","01"]
+    return new Date(Number(anio), Number(mes) - 1, Number(dia));
   }
+
+  const fechas = dias
+    .map((d) => aFechaLocal(d.fecha))
+    .sort((a, b) => a - b);
+
+  const desde = fechas[0].toLocaleDateString("es-UY");
+  const hasta = fechas[fechas.length - 1].toLocaleDateString("es-UY");
+  return desde === hasta ? desde : `${desde} al ${hasta}`;
+}
 
   return (
     <RutaProtegida>
