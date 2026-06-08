@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { usarAuth } from "@/contexto/contexto";
 
 export default function PaginaLogin() {
@@ -32,10 +33,21 @@ export default function PaginaLogin() {
       <div className="w-full max-w-sm bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="h-1 bg-[#ca3517]" />
         <div className="p-8">
-          <h1 className="text-2xl font-black text-gray-900 mb-1">
-            Control de Licencias
-          </h1>
-          <p className="text-sm text-gray-500 mb-8">SEG Ingenieria</p>
+          <div className="flex items-center gap-3 mb-6">
+            <Image
+              src="/logo-seg.png"
+              alt="SEG Ingenieria"
+              width={48}
+              height={48}
+              className="rounded-lg"
+            />
+            <div>
+              <h1 className="text-2xl font-black text-gray-900 leading-tight">
+                Control de Licencias
+              </h1>
+              <p className="text-sm text-gray-500">SEG Ingenieria</p>
+            </div>
+          </div>
 
           <form onSubmit={manejarEnvio} className="space-y-5">
             <div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { usarAuth } from "@/contexto/contexto";
 
@@ -30,10 +31,13 @@ export default function BarraNavegacion() {
     <header className="bg-black sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Nombre / marca */}
-          <span className="text-white font-bold text-sm">
-            Control de Licencias
-          </span>
+          <Image
+            src="/logo-seg.png"
+            alt="SEG Ingenieria"
+            width={36}
+            height={36}
+            className="rounded-md"
+          />
 
           {/* Links */}
           <nav className="flex items-center gap-1">
