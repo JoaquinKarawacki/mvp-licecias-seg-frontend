@@ -23,6 +23,8 @@ export default function PaginaAdminEmpleados() {
   const [sectorId, setSectorId] = useState("");
   const [esEncargado, setEsEncargado] = useState(false);
   const [guardando, setGuardando] = useState(false);
+  const [esEstudiante, setEsEstudiante] = useState(false);
+  const [horasSemanales, setHorasSemanales] = useState("");
 
   // Si editandoId es null -> estamos creando. Si tiene un id -> estamos editando ese empleado.
   const [editandoId, setEditandoId] = useState(null);
@@ -52,6 +54,8 @@ export default function PaginaAdminEmpleados() {
     setFechaIngreso("");
     setSectorId("");
     setEsEncargado(false);
+    setEsEstudiante(false);
+    setHorasSemanales("");
   }
 
   // Carga los datos de un empleado en el formulario para editarlo
@@ -64,6 +68,8 @@ export default function PaginaAdminEmpleados() {
     setFechaIngreso(empleado.fecha_ingreso ? empleado.fecha_ingreso.split("T")[0] : "");
     setSectorId(String(empleado.sector_id || ""));
     setEsEncargado(empleado.es_encargado || false);
+    setEsEstudiante(empleado.es_estudiante || false);
+    setHorasSemanales(empleado.horas_semanales ? String(empleado.horas_semanales) : "");
     setMensaje("");
     setError("");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -85,13 +91,15 @@ export default function PaginaAdminEmpleados() {
 
     // Armamos el cuerpo. Solo incluimos contraseña si el admin escribió una.
     const cuerpo = {
-      email,
-      nombre,
-      apellido,
-      fecha_ingreso: fechaIngreso,
-      sector_id: Number(sectorId),
-      es_encargado: esEncargado,
-    };
+        email,
+        nombre,
+        apellido,
+        fecha_ingreso: fechaIngreso,
+        sector_id: Number(sectorId),
+        es_encargado: esEncargado,
+        es_estudiante: esEstudiante,
+        horas_semanales: esEstudiante ? Number(horasSemanales) : 0,
+      };
     if (contrasena.trim()) {
       cuerpo.contrasena = contrasena;
     }
@@ -223,7 +231,33 @@ export default function PaginaAdminEmpleados() {
               />
               Es encargado del sector
             </label>
+              <label className="flex items-center gap-2 text-sm text-gray-700 mb-4">
+              <input
+                type="checkbox"
+                checked={esEstudiante}
+                onChange={(e) => setEsEstudiante(e.target.checked)}
+              />
+              Es estudiante
+            </label>
 
+            {esEstudiante && (
+              <div className="mb-4">
+                <label className="block text-xs uppercase tracking-widest font-bold text-gray-600 mb-2">
+                  Horas semanales
+                </label>
+                <input
+                  type="number"
+                  value={horasSemanales}
+                  onChange={(e) => setHorasSemanales(e.target.value)}
+                  placeholder="Ej: 30, 40, 48"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm
+                            focus:outline-none focus:border-[#ca3517]"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Hasta 36h → 6 días · 37-47h → 9 días · 48h o más → 12 días
+                </p>
+              </div>
+            )}
             <div className="flex gap-2">
               <button
                 onClick={guardar}

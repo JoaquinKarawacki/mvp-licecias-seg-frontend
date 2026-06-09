@@ -37,6 +37,13 @@ export default function PaginaPedirLicencia() {
       .catch((err) => setError(err.message));
   }, [usuario]);
 
+  const tiposVisibles = tipos.filter((tipo) => {
+    if (tipo.codigo === "ESTUDIO" && !usuario?.es_estudiante) {
+      return false;
+    }
+    return true;
+  });
+
   async function manejarEnvio() {
     setError("");
 
@@ -85,7 +92,7 @@ export default function PaginaPedirLicencia() {
                      focus:outline-none focus:border-[#ca3517]"
         >
           <option value="">Elegí un tipo...</option>
-          {tipos.map((tipo) => (
+          {tiposVisibles.map((tipo) => (
             <option key={tipo.id} value={tipo.id}>
               {tipo.nombre}
             </option>

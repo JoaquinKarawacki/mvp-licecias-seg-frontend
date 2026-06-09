@@ -61,9 +61,13 @@ export default function BarraNavegacion() {
 
           {/* Usuario + cerrar sesion */}
           <div className="flex items-center gap-3">
-            <span className="text-gray-400 text-xs hidden sm:block">
-              {usuario?.nombre}
-            </span>
+              <Link
+                href="/cambiar-contrasena"
+                className="text-gray-400 hover:text-white text-xs hidden sm:block
+                          transition-colors duration-200"
+              >
+                {usuario?.nombre}
+              </Link>
             <button
               onClick={cerrarSesion}
               className="text-gray-300 hover:text-white text-sm font-medium
