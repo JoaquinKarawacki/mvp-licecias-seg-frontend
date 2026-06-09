@@ -12,6 +12,7 @@ const redHat = Red_Hat_Display({
 export const metadata = {
   title: "Control de Licencias — SEG Ingenieria",
   description: "Sistema interno de gestion de licencias",
+  icons: { icon: "/logo-seg.png" },
 };
 
 export default function RootLayout({ children }) {
