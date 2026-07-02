@@ -13,6 +13,7 @@ const SECCIONES = [
   { href: "/admin/feriados", titulo: "Feriados", descripcion: "Días no laborables" },
   { href: "/admin/saldos", titulo: "Saldos", descripcion: "Generar y ajustar saldos" },
   { href: "/admin/saldos-empleados", titulo: "Saldos por empleado", descripcion: "Tabla de todos los empleados y sus saldos" },
+  { href: "/admin/auditoria", titulo: "Auditoría", descripcion: "Registro de todas las acciones del sistema" },
 ];
 
 // Formatea un objeto Date a "YYYY-MM-DD" usando los componentes LOCALES.
