@@ -3,8 +3,16 @@
 import { usarAuth } from "@/contexto/contexto";
 import RutaProtegida from "@/componentes/RutaProtegida";
 
+function calcularEtiqueta(usuario) {
+  if (usuario?.usuario?.rol === "ADMIN") return "Administrador";
+  if (usuario?.es_encargado) return "Encargado";
+  if (usuario?.puede_aprobar) return "Aprobador";
+  return null;
+}
+
 export default function PaginaHome() {
   const { usuario } = usarAuth();
+  const etiqueta = calcularEtiqueta(usuario);
 
   return (
     <RutaProtegida>
@@ -13,8 +21,8 @@ export default function PaginaHome() {
           Hola, {usuario?.nombre}
         </h1>
         <p className="text-sm text-gray-500 mb-1">
-          {usuario?.usuario?.email} · Rol: {usuario?.usuario?.rol}
-          {usuario?.es_encargado ? " · Encargado" : ""}
+          {usuario?.usuario?.email}
+          {etiqueta ? ` · ${etiqueta}` : ""}
         </p>
         <p className="text-sm text-gray-500">
           Sector: {usuario?.sector?.nombre}
