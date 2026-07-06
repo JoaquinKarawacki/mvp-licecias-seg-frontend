@@ -17,9 +17,9 @@ export default function BarraNavegacion() {
     { href: "/solicitudes/nueva", etiqueta: "Pedir Licencia" },
   ];
 
-  // Solo si es encargado
-  if (usuario?.es_encargado) {
-    enlaces.push({ href: "/pendientes", etiqueta: "Pendientes del Sector" });
+  // Solo si puede aprobar solicitudes
+  if (usuario?.puede_aprobar) {
+    enlaces.push({ href: "/pendientes", etiqueta: "Pendientes" });
   }
 
   // Solo si es admin

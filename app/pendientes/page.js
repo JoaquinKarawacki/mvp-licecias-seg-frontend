@@ -77,7 +77,7 @@ export default function PaginaPendientes() {
   return (
     <RutaProtegida>
       <h1 className="text-2xl font-black text-gray-900 mb-8">
-        Pendientes del Sector
+        Solicitudes Pendientes
       </h1>
 
       {cargando && (
@@ -90,7 +90,7 @@ export default function PaginaPendientes() {
 
       {!cargando && !error && solicitudes.length === 0 && (
         <p className="text-sm text-gray-500">
-          No hay solicitudes pendientes en tu sector.
+          No hay solicitudes pendientes.
         </p>
       )}
 
