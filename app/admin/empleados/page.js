@@ -26,7 +26,11 @@ export default function PaginaAdminEmpleados() {
   const [esEstudiante, setEsEstudiante] = useState(false);
   const [horasSemanales, setHorasSemanales] = useState("");
   const [guardando, setGuardando] = useState(false);
- 
+
+  // Filtros del listado (no tocan el backend)
+  const [rolFiltro, setRolFiltro] = useState("");
+  const [sectorFiltro, setSectorFiltro] = useState("");
+
   function cargarEmpleados() {
     pedirApi("/empleados")
       .then((datos) => setEmpleados(datos))
@@ -92,6 +96,13 @@ export default function PaginaAdminEmpleados() {
     }
   }
  
+  const empleadosFiltrados = empleados.filter((empleado) => {
+    const coincideRol = !rolFiltro || empleado.usuario?.rol === rolFiltro;
+    const coincideSector =
+      !sectorFiltro || String(empleado.sector_id) === sectorFiltro;
+    return coincideRol && coincideSector;
+  });
+
   return (
     <RutaProtegida>
       {usuario?.usuario?.rol !== "ADMIN" ? (
@@ -239,15 +250,56 @@ export default function PaginaAdminEmpleados() {
  
           {/* Listado */}
           <h2 className="font-bold text-gray-900 mb-4">Empleados</h2>
- 
+
+          <div className="flex flex-wrap items-end gap-4 mb-4">
+            <div>
+              <label className="block text-xs uppercase tracking-widest font-bold text-gray-600 mb-2">
+                Rol
+              </label>
+              <select
+                value={rolFiltro}
+                onChange={(e) => setRolFiltro(e.target.value)}
+                className="border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white
+                           focus:outline-none focus:border-[#ca3517]"
+              >
+                <option value="">Todos</option>
+                <option value="EMPLEADO">Empleado</option>
+                <option value="ADMIN">Admin</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs uppercase tracking-widest font-bold text-gray-600 mb-2">
+                Sector
+              </label>
+              <select
+                value={sectorFiltro}
+                onChange={(e) => setSectorFiltro(e.target.value)}
+                className="border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white
+                           focus:outline-none focus:border-[#ca3517]"
+              >
+                <option value="">Todos</option>
+                {sectores.map((sector) => (
+                  <option key={sector.id} value={sector.id}>
+                    {sector.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
           {cargando && <p className="text-sm text-gray-400">Cargando...</p>}
- 
-          {!cargando && empleados.length === 0 && (
-            <p className="text-sm text-gray-500">No hay empleados cargados.</p>
+
+          {!cargando && empleadosFiltrados.length === 0 && (
+            <p className="text-sm text-gray-500">
+              {empleados.length === 0
+                ? "No hay empleados cargados."
+                : "No hay empleados que coincidan con el filtro."}
+            </p>
           )}
- 
+
           <div className="space-y-3">
-            {empleados.map((empleado) => (
+            {empleadosFiltrados.map((empleado) => (
               <div
                 key={empleado.id}
                 className={`bg-white rounded-xl border p-4 flex items-center justify-between
