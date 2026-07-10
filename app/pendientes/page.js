@@ -3,22 +3,9 @@
 import { useEffect, useState } from "react";
 import { usarAuth } from "@/contexto/contexto";
 import { pedirApi } from "@/librerias/api";
+import { formatearDias } from "@/librerias/fechas";
 import RutaProtegida from "@/componentes/RutaProtegida";
 import EstadoBadge from "@/componentes/EstadoBadge";
-
-// Parsea "2026-07-01T00:00:00Z" como fecha LOCAL (mismo fix de antes)
-function aFechaLocal(valor) {
-  const [anio, mes, dia] = valor.split("T")[0].split("-");
-  return new Date(Number(anio), Number(mes) - 1, Number(dia));
-}
-
-function formatearRango(dias) {
-  if (!dias || dias.length === 0) return "-";
-  const fechas = dias.map((d) => aFechaLocal(d.fecha)).sort((a, b) => a - b);
-  const desde = fechas[0].toLocaleDateString("es-UY");
-  const hasta = fechas[fechas.length - 1].toLocaleDateString("es-UY");
-  return desde === hasta ? desde : `${desde} al ${hasta}`;
-}
 
 export default function PaginaPendientes() {
   const { usuario } = usarAuth();
@@ -107,7 +94,7 @@ export default function PaginaPendientes() {
                 </h2>
                 <p className="text-sm text-gray-500">
                   {solicitud.tipo_licencia?.nombre} ·{" "}
-                  {formatearRango(solicitud.dias)}
+                  {formatearDias(solicitud.dias)}
                 </p>
               </div>
               <EstadoBadge estado={solicitud.estado} />

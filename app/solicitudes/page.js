@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usarAuth } from "@/contexto/contexto";
 import { pedirApi } from "@/librerias/api";
+import { formatearDias } from "@/librerias/fechas";
 import RutaProtegida from "@/componentes/RutaProtegida";
 import EstadoBadge from "@/componentes/EstadoBadge";
 
@@ -35,26 +36,6 @@ export default function PaginaSolicitudes() {
     }
   }
 
-  // Da formato a las fechas del array de dias: muestra el rango
-  function formatearRango(dias) {
-  if (!dias || dias.length === 0) return "-";
-
-  // Parsea "2026-07-01T00:00:00.000Z" como fecha LOCAL (sin corrimiento de zona)
-  function aFechaLocal(valor) {
-    const soloFecha = valor.split("T")[0];        // "2026-07-01"
-    const [anio, mes, dia] = soloFecha.split("-"); // ["2026","07","01"]
-    return new Date(Number(anio), Number(mes) - 1, Number(dia));
-  }
-
-  const fechas = dias
-    .map((d) => aFechaLocal(d.fecha))
-    .sort((a, b) => a - b);
-
-  const desde = fechas[0].toLocaleDateString("es-UY");
-  const hasta = fechas[fechas.length - 1].toLocaleDateString("es-UY");
-  return desde === hasta ? desde : `${desde} al ${hasta}`;
-}
-
   return (
     <RutaProtegida>
       <h1 className="text-2xl font-black text-gray-900 mb-8">Mis Solicitudes</h1>
@@ -85,7 +66,7 @@ export default function PaginaSolicitudes() {
                   {solicitud.tipo_licencia?.nombre}
                 </h2>
                 <p className="text-sm text-gray-500">
-                  {formatearRango(solicitud.dias)}
+                  {formatearDias(solicitud.dias)}
                 </p>
               </div>
               <EstadoBadge estado={solicitud.estado} />
