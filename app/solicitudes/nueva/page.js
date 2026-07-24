@@ -37,6 +37,11 @@ export default function PaginaPedirLicencia() {
       .catch((err) => setError(err.message));
   }, [usuario]);
 
+  // Aviso (no bloqueante): el empleado marcó algún sábado o domingo
+  const incluyeFinDeSemana = diasSeleccionados.some(
+    (dia) => dia.getDay() === 0 || dia.getDay() === 6
+  );
+
   const tiposVisibles = tipos.filter((tipo) => {
     if (tipo.codigo === "ESTUDIO" && !usuario?.es_estudiante) {
       return false;
@@ -112,9 +117,16 @@ export default function PaginaPedirLicencia() {
             weekStartsOn={1}
           />
         </div>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-sm text-gray-500 mb-2">
           {diasSeleccionados.length} día(s) marcado(s)
         </p>
+        <div className="mb-6">
+          {incluyeFinDeSemana && (
+            <p className="bg-amber-50 text-amber-700 border border-amber-200 rounded-lg px-4 py-3 text-sm">
+              Estás marcando un sábado o un domingo. Fijate que sea correcto antes de enviar la solicitud.
+            </p>
+          )}
+        </div>
 
         {/* Comentario */}
         <label className="block text-xs uppercase tracking-widest font-bold text-gray-600 mb-2">
