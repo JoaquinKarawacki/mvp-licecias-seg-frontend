@@ -20,6 +20,7 @@ export default function BarraNavegacion() {
   // Solo si puede aprobar solicitudes
   if (usuario?.puede_aprobar) {
     enlaces.push({ href: "/pendientes", etiqueta: "Pendientes" });
+    enlaces.push({ href: "/equipo/saldos", etiqueta: "Saldos del Equipo" });
   }
 
   // Solo si es admin
