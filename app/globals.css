@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   font-family: var(--font-red-hat, "Red Hat Display", Arial, sans-serif);
 }
