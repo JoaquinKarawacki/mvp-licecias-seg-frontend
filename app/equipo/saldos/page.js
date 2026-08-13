@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { usarAuth } from "@/contexto/contexto";
 import { pedirApi } from "@/librerias/api";
 import RutaProtegida from "@/componentes/RutaProtegida";
@@ -163,8 +164,13 @@ export default function PaginaSaldosEquipo() {
                     key={empleado.id}
                     className="border-b border-gray-50 hover:bg-gray-50"
                   >
-                    <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">
-                      {empleado.apellido}, {empleado.nombre}
+                    <td className="px-4 py-3 font-medium whitespace-nowrap">
+                      <Link
+                        href={`/equipo/empleados/${empleado.id}`}
+                        className="text-gray-900 hover:text-[#ca3517] transition-colors duration-200"
+                      >
+                        {empleado.apellido}, {empleado.nombre}
+                      </Link>
                     </td>
                     <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
                       {empleado.sector?.nombre || "—"}

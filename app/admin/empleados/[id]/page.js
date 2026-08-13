@@ -6,14 +6,17 @@ import Link from "next/link";
 import { usarAuth } from "@/contexto/contexto";
 import { pedirApi } from "@/librerias/api";
 import RutaProtegida from "@/componentes/RutaProtegida";
- 
+import ListaHistorialSolicitudes from "@/componentes/ListaHistorialSolicitudes";
+
 export default function PaginaDetalleEmpleado() {
   const { usuario } = usarAuth();
   const params = useParams();
   const empleadoId = params.id;
- 
+
   const [empleado, setEmpleado] = useState(null);
   const [saldos, setSaldos] = useState([]);
+  const [historial, setHistorial] = useState([]);
+  const [cargandoHistorial, setCargandoHistorial] = useState(false);
   const [sectores, setSectores] = useState([]);
   const [anio, setAnio] = useState(2026);
   const [cargando, setCargando] = useState(true);
@@ -59,7 +62,15 @@ export default function PaginaDetalleEmpleado() {
       .catch(() => setSaldos([]))
       .finally(() => setCargandoSaldos(false));
   }
- 
+
+  function cargarHistorial() {
+    setCargandoHistorial(true);
+    return pedirApi(`/solicitudes/empleado/${empleadoId}`)
+      .then((datos) => setHistorial(datos.solicitudes))
+      .catch(() => setHistorial([]))
+      .finally(() => setCargandoHistorial(false));
+  }
+
   // Carga inicial
   useEffect(() => {
     if (!usuario || !empleadoId) return;
@@ -67,6 +78,7 @@ export default function PaginaDetalleEmpleado() {
     Promise.all([
       cargarEmpleado(),
       cargarSaldos(anio),
+      cargarHistorial(),
       pedirApi("/sectores").then((datos) => setSectores(datos)),
     ])
       .catch((err) => setError(err.message))
@@ -313,10 +325,20 @@ export default function PaginaDetalleEmpleado() {
                       </div>
                     )}
                   </div>
- 
+
+                  {/* Card historial de licencias */}
+                  <div className="bg-white rounded-xl border border-gray-100 p-6">
+                    <h2 className="font-bold text-gray-900 mb-5">Historial de licencias</h2>
+                    {cargandoHistorial ? (
+                      <p className="text-sm text-gray-400">Cargando historial...</p>
+                    ) : (
+                      <ListaHistorialSolicitudes solicitudes={historial} />
+                    )}
+                  </div>
+
                 </div>
               )}
- 
+
               {/* ─── MODO EDITAR ───────────────────────────────────────── */}
               {modoEditar && (
                 <div className="bg-white rounded-xl border border-gray-100 p-6 max-w-xl">
